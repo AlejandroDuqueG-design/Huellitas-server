@@ -11,8 +11,8 @@ const adoptionSchema = new Schema ({
         ref: "User"
     },
     adoptionRequestState: [String],
-    requestDate: Data,
-    resolutionDate: null,
+    requestDate: Date,
+    resolutionDate: Date,
     comments: String
 })
 

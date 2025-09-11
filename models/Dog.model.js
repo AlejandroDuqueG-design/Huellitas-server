@@ -1,4 +1,4 @@
-const mongoose = requiere("mongoose")
+const mongoose = require("mongoose")
 
 const Schema = mongoose.Schema;
 const dogSchema = new Schema ({
@@ -12,7 +12,7 @@ const dogSchema = new Schema ({
     size: String, 
     adoptionRequestState: [String],
     image: String,
-    entryDate: Data,
+    entryDate: Date,
     description: String
 })
 
