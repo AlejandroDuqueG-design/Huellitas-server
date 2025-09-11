@@ -1,6 +1,9 @@
-const router = require("express").Router();
+const express = require("express");
+const path = require("path");
+const router = express.Router();
+const cohortsRouter = require("./cohorts.routes");
+const studentsRouter = require("./students.routes");
 
-// ℹ️ Test Route. Can be left and used for waking up the server if idle
 router.get("/", (req, res, next) => {
   res.json("All good in here");
 });

@@ -1,10 +1,11 @@
-// ❗This is an example of a User Model. 
-// TODO: Please make sure you edit the User model to whatever makes sense in your project.
-
 const { Schema, model } = require("mongoose");
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      require: true
+    },
     email: {
       type: String,
       required: [true, 'Email is required.'],
@@ -15,10 +16,15 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, 'Password is required.']
-    }
+    },
+    phoneNumber: {
+      type: Number,
+      require: true,
+    },
+    role: String,
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`    
+    // Extra configuration: this second object adds extra properties: `createdAt` and `updatedAt` will show us as admins when the user create profile and when the profile was updated   
     timestamps: true
   }
 );
