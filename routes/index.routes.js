@@ -1,9 +1,9 @@
 const express = require("express");
 const path = require("path");
 const router = express.Router();
-const dogRouter = require("./Dog.routes")
-const adoptionRouter = require("./Adoption.routes")
-const userRouter = require("./User.routes")
+const dogRouter = require("./dog.routes")
+const adoptionRouter = require("./adoption.routes")
+const userRouter = require("./user.routes")
 
 
 // ℹ️ Test Route. Can be left and used for waking up the server if idle (inactivo)
