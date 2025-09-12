@@ -82,7 +82,7 @@ router.delete("/:adoptionId", async (req, res, next) => {
 //GET /api/auth/adoption/:userId - Se reciben todas las solicitudes de adopción hechas por un solo usuario
 router.get("/:userId", async (req, res, next) => {
   try {
-    const response = await Adoption.find();
+    const response = await Adoption.find({user: req.params.userId}).populate("user");
     console.log(response);
     res.status(202).json(response);
   } catch (error) {
@@ -93,7 +93,7 @@ router.get("/:userId", async (req, res, next) => {
 //GET /api/auth/adoption/:dogId - Se reciben todas las solicitudes de adopción hechas para un solo perro
 router.get("/:dogId", async (req, res, next) => {
   try {
-    const response = await Adoption.findById({dog: req.params.dogId}).populate("dog");
+    const response = await Adoption.findBy({dog: req.params.dogId}).populate("dog");
     console.log(response);
     res.status(202).json(response);
   } catch (error) {

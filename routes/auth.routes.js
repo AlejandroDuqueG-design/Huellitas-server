@@ -4,17 +4,18 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
+const { validateToken } = require("../middlewares/auth.middlewares");
 
 //RUTAS DE AUTENTICACIÓN
 
-// POST /auth/signup - To Create a new user in the database
+// POST /auth/signup - Para crear un usuario en la Base de Datos
 router.post("/signup", async (req, res, next) => {
   console.log(req.body);
 
   const { name, email, password, phoneNumber, address } = req.body;
   console.log(email, password);
   //Validaciones:
-  //1. Ver si toda la información (email, password) se recibe o si esta vacia
+  //1. Confirmar si toda la información (email, password) se recibe o si esta vacia
   if (!email || !password) {
     res.status(400).json({ errorMessage: "email and password are mandatory" });
     return; // stop the execution of the route
@@ -62,18 +63,59 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
+
+//LOG IN  
+/// POST /auth/login 
 router.post("/login", async (req, res, next) => {
-  const { name, email, password } = req.body;
-  console.log(name, email, password);
-  try {
-    const foundUser = await User.findOne({ email: email });
-    if (foundUser !== null) {
-      res.status(400).json({ errorMessage: "user already registered with that email" });
-      return;
-    }
-  } catch (error) {
-    console.log(error);
+  const {email, password } = req.body;
+
+  if (!email || !password) {
+    res.status(400).json({errorMessage: "email and password are mandatory"})
+    return // stop the execution of the route
   }
+  try {
+    
+    // the user needs to exist in the database
+    const foundUser = await User.findOne({ email })
+    console.log(foundUser)
+    if (foundUser === null) {
+      res.status(400).json({errorMessage: "there are no users registered with that email"})
+      return
+    }
+
+    // the passwords should match
+    const isPasswordCorrect = await bcrypt.compare(password, foundUser.password)
+    if (isPasswordCorrect === false) {
+      res.status(400).json({errorMessage: "the password is not correct"})
+      return
+    }
+    
+    // info from the user that will not change often
+    const payload = {
+      _id: foundUser._id,
+      name: foundUser.name,
+      email: foundUser.email,
+      role: foundUser.role
+    }
+
+    // proceed to create the Token
+    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "30d"
+    })
+  
+    res.status(202).json({authToken})
+
+  } catch (error) {
+    next(error)
+  }
+
 });
+
+// GET "/auth/verify" => validate the token and send the info of the user that has logged in (functionality only for the frontend)
+router.get("/verify", validateToken, (req, res) => {
+  res.status(200).json(req.payload) // sending to the FE the info from the logged in user.
+})
+
 
 module.exports = router;

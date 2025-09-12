@@ -25,7 +25,11 @@ const userSchema = new Schema(
       type: String,
       required: true
     },
-    role: String,
+    role: {
+      type: String,
+      enum: ["Admin", "User"],
+      default: "User"
+    },
   },
   {
     // Extra configuration: this second object adds extra properties: `createdAt` and `updatedAt` will show us as admins when the user create profile and when the profile was updated   
