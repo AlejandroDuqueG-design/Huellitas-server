@@ -3,8 +3,6 @@ const jwt = require("jsonwebtoken")
 //! this validate token middleware should be used on ANY route that is private.
 function validateToken(req, res, next) {
 
-  console.log(req.headers)
-
   try {
     
     const authToken = req.headers.authorization.split(" ")[1]
@@ -21,7 +19,7 @@ function validateToken(req, res, next) {
 
 function validateAdminRole(req, res, next) {
 
-  if (req.payload.role === "admin") {
+  if (req.payload.role === "Admin") {
     next() // continue to the route
   } else {
     res.status(401).json({errorMessage: "you are not an admin"})

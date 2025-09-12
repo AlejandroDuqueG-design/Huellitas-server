@@ -16,7 +16,7 @@ router.get("/", validateToken, validateAdminRole, async (req, res, next) => {
 });
 
 //GET /api/auth/user/:userId - Se recibe los detalles de la información de un solo ususario (Admin Level)
-router.get("/:userId", async (req, res, next) => {
+router.get("/:userId", validateToken, validateAdminRole, async (req, res, next) => {
   try {
     const response = await User.findById(req.params.userId);
     console.log(response);
@@ -38,7 +38,7 @@ router.get("/my-profile", validateToken, async (req, res, next) => {
 });
 
 //PATCH /api/auth/user/:userId - Actualiza una propiedad de la información de un usuario
-router.patch("/:userId", async (req, res, next) => {
+router.patch("/:userId", validateToken, async (req, res, next) => {
   const { name, email, password, phoneNumber, address, role } = req.body;
   try {
     const response = await User.findByIdAndUpdate(
@@ -60,8 +60,8 @@ router.patch("/:userId", async (req, res, next) => {
   }
 });
 
-//DELETE /api/auth/user/:userId - Elimina a un unico usuario
-router.delete("/:userId", async (req, res, next) => {
+//DELETE /api/auth/user/:userId - Elimina a un unico usuario (Admin Level)
+router.delete("/:userId", validateToken, validateAdminRole, async (req, res, next) => {
   try {
     const response = await User.findByIdAndDelete(req.params.userId);
     console.log(response);
@@ -70,8 +70,6 @@ router.delete("/:userId", async (req, res, next) => {
     console.log(error);
   }
 });
-
-
 
 
 module.exports = router;
