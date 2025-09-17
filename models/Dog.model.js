@@ -11,16 +11,16 @@ const dogSchema = new Schema(
     breed: String,
     sex: {
       type: String,
-      enum: ["Female", "Male"],
+      enum: ["Hembra", "Macho"],
     },
     size: {
       type: String,
-      enum: ["Small", "Medium", "Large"],
+      enum: ["Mini", "Pequeño", "Mediano", "Grande"],
     },
     adoptionStatus: {
       type: String,
-      enum: ["Adopted", "Under Review", "Available", "Pending"],
-      default: "Pending"
+      enum: ["Adoptado", "En revisión", "Disponible para adopción"],
+      default: "En revisión"
     },
     image: String,
     entryDate: Date,
