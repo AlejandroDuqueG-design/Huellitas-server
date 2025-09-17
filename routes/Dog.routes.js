@@ -23,7 +23,8 @@ router.post("/", validateToken, validateAdminRole, async (req, res, next) => {
     });
     res.status(201).json(response);
   } catch (error) {
-    console.log(error);
+    console.log(error) ;
+    next(error)
   }
 });
 

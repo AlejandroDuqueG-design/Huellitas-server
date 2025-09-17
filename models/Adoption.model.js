@@ -14,8 +14,8 @@ const adoptionSchema = new Schema(
     adoptionRequestState: {
       type: String,
       required: true,
-      enum: ["Approved", "Under Review", "Not Approved", "Pending"],
-      default: "Pending"
+      enum: ["Aprobado", "En revisión", "Rechazado", "Pendiente"],
+      default: "En revisión"
     },
     resolutionDate: Date,
     comments: String,
