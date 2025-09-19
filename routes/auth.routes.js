@@ -16,7 +16,7 @@ router.post("/signup", async (req, res, next) => {
   //Validaciones:
   //1. Confirmar si toda la información (email, password) se recibe o si esta vacia
   if (!email || !password) {
-    res.status(400).json({ errorMessage: "email and password are mandatory" });
+    res.status(400).json({ errorMessage: "Email and password are mandatory" });
     return; // stop the execution of the route
   }
 
@@ -25,14 +25,14 @@ router.post("/signup", async (req, res, next) => {
   if (passwordRegex.test(password) === false) {
     res
       .status(400)
-      .json({ errorMessage: "password is not strong enough. It needs to have at least 8 characteres, one lowercase, one uppercase and one digit." });
+      .json({ errorMessage: "Password is not strong enough. It needs to have at least 8 characteres, one lowercase, one uppercase and one digit." });
     return;
   }
 
   // 3. El email también necesita una estructura apropiada de email
   const emailRegex = /^[_a-zA-Z0-9]([\-+_%.a-zA-Z0-9]+)?@([_+\-%a-zA-Z0-9]+)(\.[a-zA-Z0-9]{0,6}){1,2}([a-zA-Z0-9]$)/;
   if (emailRegex.test(email) === false) {
-    res.status(400).json({ errorMessage: "email does not comply with email rules. It can not start with special characthers" });
+    res.status(400).json({ errorMessage: "Email does not comply with email rules. It can not start with special characthers" });
     return;
   }
 
@@ -40,7 +40,7 @@ router.post("/signup", async (req, res, next) => {
     // 4. Es necesario establecer que no puede haber dos usuarios con el mismo email
     const foundUser = await User.findOne({ email: email });
     if (foundUser !== null) {
-      res.status(400).json({ errorMessage: "user already registered with that email" });
+      res.status(400).json({ errorMessage: "User already registered with that email" });
       return;
     }
 
@@ -69,7 +69,7 @@ router.post("/login", async (req, res, next) => {
   const {email, password } = req.body;
 
   if (!email || !password) {
-    res.status(400).json({errorMessage: "email and password are mandatory"})
+    res.status(400).json({errorMessage: "El correo electronico y la contraseña, son obligatorios"})
     return // stop the execution of the route
   }
   try {
@@ -78,14 +78,14 @@ router.post("/login", async (req, res, next) => {
     const foundUser = await User.findOne({ email })
     console.log(foundUser)
     if (foundUser === null) {
-      res.status(400).json({errorMessage: "there are no users registered with that email"})
+      res.status(400).json({errorMessage: "No hay usuarios registrados con ese correo electronico"})
       return
     }
 
     // the passwords should match
     const isPasswordCorrect = await bcrypt.compare(password, foundUser.password)
     if (isPasswordCorrect === false) {
-      res.status(400).json({errorMessage: "the password is not correct"})
+      res.status(400).json({errorMessage: "La constraseña es incorrecta"})
       return
     }
     

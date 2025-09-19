@@ -35,7 +35,7 @@ router.post("/", validateToken, async (req, res, next) => {
 //GET /api/adoption/ - Usuario Accede a la lista de todos SUS solicitudes de adopción
 router.get("/", validateToken, async (req, res, next) => {
   try {
-    const response = await Adoption.find({ user: req.payload._id }); //Garantizar que solo el user puede cambiar sus propios datos
+    const response = await Adoption.find({ user: req.payload._id }).populate("dog", "name").populate("user", "name"); //Garantizar que solo el user puede cambiar sus propios datos
     console.log(response);
     res.status(202).json(response);
   } catch (error) {
@@ -46,11 +46,11 @@ router.get("/", validateToken, async (req, res, next) => {
 //GET /api/adoption/:adoptionId - Usuario recibe los detalles de una sola solicitud de adopción
 router.get("/:adoptionId", validateToken, async (req, res, next) => {
   try {
-    const response = await Adoption.find({ user: req.payload._id });
-    console.log("Get Adoption Id");
+  const response = await Adoption.findById(req.params.adoptionId).populate("dog", "name").populate("user", "name")
     res.status(202).json(response);
   } catch (error) {
     console.log(error);
+    next(error)
   }
 });
 
@@ -59,7 +59,7 @@ router.patch("/:adoptionId", validateToken, async (req, res, next) => {
   const { dog, user, requestDate, resolutionDate,  } = req.body;
   try {
     const response = await Adoption.findByIdAndUpdate(
-      { user: req.payload._id },
+      req.params.adoptionId,
       {
         dog,
         user,
