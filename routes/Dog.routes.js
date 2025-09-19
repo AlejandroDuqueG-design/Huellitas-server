@@ -23,18 +23,21 @@ router.post("/", validateToken, validateAdminRole, async (req, res, next) => {
     });
     res.status(201).json(response);
   } catch (error) {
-    console.log(error) ;
-    next(error)
+    console.log(error);
+    next(error);
   }
 });
 
-//GET /api/auth/dogs - Accede a la lista de todos los perros creados
+//GET /api/auth/dog - Accede a la lista de todos los perros creados
+// FILTER /dog
 router.get("/", async (req, res, next) => {
   try {
-    const response = await Dog.find();
-    res.status(202).json(response);
+    const { sex } = req.query;
+
+    const dogs = await Dog.find(sex ? { sex } : {});
+    res.status(202).json(dogs);
   } catch (error) {
-    console.log(error, "Checking route");
+    res.status(500).json({ message: "Error obteniendo perros", error });
   }
 });
 
